@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bras de fer · SP</title>
+<meta name="theme-color" content="#0f0f12">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Bras de fer">
+<style>
+  html,body{margin:0;height:100%;background:#0f0f12;overflow:hidden;color:#f2f2f4;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+  iframe{position:fixed;left:0;width:100%;border:0;background:#0f0f12;
+    top:env(safe-area-inset-top);height:calc(100% - env(safe-area-inset-top) - env(safe-area-inset-bottom))}
+  .ecran{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:14px;text-align:center;padding:24px;background:#0f0f12}
+  .ecran img{width:96px;height:96px;border-radius:22px}
+  .ecran small{color:#8d8d99;max-width:320px;line-height:1.5}
+</style>
+</head>
+<body>
+
+<div class="ecran" id="splash"><img src="icon-192.png" alt=""><b>Bras de fer · SP</b><small>Chargement…</small></div>
+<iframe id="app" title="Bras de fer" hidden></iframe>
+
+<script>
+/* =====================================================================
+   ⬇️  COLLE ICI TON LIEN D'APPLICATION WEB (celui qui finit par /exec)
+   ===================================================================== */
+const LIEN_APPLI = 'https://script.google.com/macros/s/AKfycbxKgxW5jKsP60yJ39_2-gkv9w7YSF00It6GQyMHxPtkYdMp4nJD8SFynZzjUxLeLtU/exec';
+
+const splash = document.getElementById('splash');
+const app = document.getElementById('app');
+if (!/^https:\/\/script\.google\.com\/.+\/exec\/?$/.test(LIEN_APPLI.trim())) {
+  splash.querySelector('small').innerHTML =
+    "Lien de l'appli manquant.<br>Ouvre <b>index.html</b> et colle ton lien <b>/exec</b> à la ligne <b>LIEN_APPLI</b>.";
+} else {
+  app.src = LIEN_APPLI.trim();
+  app.hidden = false;
+  app.addEventListener('load', () => { splash.style.display = 'none'; });
+  // Si Google met trop de temps, on affiche quand même l'appli.
+  setTimeout(() => { splash.style.display = 'none'; }, 8000);
+}
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+</script>
+</body>
+</html>
